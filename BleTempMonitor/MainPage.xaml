@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BleTempMonitor.MainPage"
+             xmlns:viewModel="clr-namespace:BleTempMonitor.ViewModel"
+             xmlns:model="clr-namespace:BleTempMonitor.Models"
+             x:DataType="viewModel:SensorNodeViewModel"
+             Title="{Binding Title}">
+
+    <StackLayout>
+
+        <RefreshView Command="{Binding UpdateSensorsCommand}"
+                     IsRefreshing="{Binding IsRefreshing}">
+
+            <CollectionView ItemsSource="{Binding Sensors}" SelectionMode="None">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="model:SensorNode">
+                        <Grid Padding="5" ColumnDefinitions="*, auto">
+                            
+                            
+                            
+                        </Grid>
+                        
+                        
+                    </DataTemplate>
+                    
+                    
+                </CollectionView.ItemTemplate>
+                
+                
+            </CollectionView>
+            
+            
+        </RefreshView>
+     
+
+    </StackLayout>
+
+    
+</ContentPage>
