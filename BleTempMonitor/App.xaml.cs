@@ -12,6 +12,9 @@ namespace BleTempMonitor
         private static IAlertService AlertService;
         public static IAlertService AlertSvc => AlertService;
 
+        private static ISettingsService SettingsService;
+        public static ISettingsService Settings => SettingsService;
+
         public readonly static LogService Logger = new();
 
         public App(IServiceProvider provider)
@@ -20,7 +23,8 @@ namespace BleTempMonitor
 
             ServicesProvider = provider;
             AlertService = Services.GetService<IAlertService>();
-
+            SettingsService = Services.GetService<ISettingsService>();
+            
             MainPage = new AppShell();
         }
     }

@@ -17,12 +17,13 @@ namespace BleTempMonitor
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
             builder.Services.AddSingleton<IAlertService, AlertService>();
+            builder.Services.AddSingleton<ISettingsService, SettingsService>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
             //builder.Services.AddSingleton<BleService>();
 
-            builder.Services.AddSingleton<SensorNodeViewModel>();
+            builder.Services.AddSingleton<BleScanViewModel>();
             builder.Services.AddSingleton<LoadingPageViewModel>();
 
             builder.Services.AddSingleton<MainPage>();

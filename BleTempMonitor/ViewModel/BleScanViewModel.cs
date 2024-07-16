@@ -1,5 +1,6 @@
 ﻿using BleTempMonitor.Models;
 using BleTempMonitor.Services;
+using BleTempMonitor.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Maui.ApplicationModel;
@@ -18,23 +19,27 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Runtime.InteropServices.Marshalling;
 
 namespace BleTempMonitor.ViewModel
 {
-    public partial class SensorNodeViewModel : BaseViewModel
+    public partial class BleScanViewModel : BaseViewModel
     {
         
-        CancellationTokenSource _scanCancellationTokenSource = null;
+        CancellationTokenSource? _scanCancellationTokenSource = null;
         private readonly IBluetoothLE _ble;
         protected IAdapter Adapter;
 
         public ObservableCollection<BleDeviceViewModel> BleDevices { get; private set; }
+        public ObservableCollection<SensorViewModel> Sensors { get; private set; }
 
-
-
-        public SensorNodeViewModel()
+        public BleScanViewModel()
         {
+            Title = "SCan for Sensors";
+
             BleDevices = [];
+            Sensors = [];
+
             _ble = CrossBluetoothLE.Current;
 
             Adapter = _ble?.Adapter;
@@ -70,18 +75,9 @@ namespace BleTempMonitor.ViewModel
 
         private void OnDeviceAdvertised(object? sender, DeviceEventArgs e)
         {
-            DebugMessage("OnDeviceAdvertised");
-            AddOrUpdateDevice(e.Device);
-            foreach(var ad in e.Device.AdvertisementRecords)
-            {
-
-                DebugMessage(ad.ToString());
-                if (ad.Type == AdvertisementRecordType.CompleteLocalName)
-                {
-                    DebugMessage($"Completed Name = {System.Text.Encoding.Default.GetString(ad.Data)}");
-                }
-            }
-            DebugMessage("OnDeviceAdvertised None");
+            DebugMessage("OnDeviceAdvertised Start");
+            AddOrUpdateSensor(e.Device);
+            DebugMessage("OnDeviceAdvertised Stop");
         }
 
         private void Adapter_ScanTimeoutElapsed(object? sender, EventArgs e)
@@ -99,9 +95,6 @@ namespace BleTempMonitor.ViewModel
 
         [ObservableProperty]
         bool isRefreshing;
-
-        [ObservableProperty]
-        ObservableCollection<SensorNode> sensors;
 
 
         [RelayCommand]
@@ -128,6 +121,10 @@ namespace BleTempMonitor.ViewModel
 
         private async void ScanForDevicesAsync()
         {
+            if (IsScanning) return;
+
+            IsScanning = true;
+
             if (!_ble.IsOn)
             {
                 ShowMessage("Bluetooth is not ON.\nPlease turn on Bluetooth and try again.");
@@ -183,13 +180,52 @@ namespace BleTempMonitor.ViewModel
             if (permissionResult != PermissionStatus.Granted)
             {
                 permissionResult = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+                if (permissionResult != PermissionStatus.Granted)
+                {
+                    DebugMessage("Location Persmission not granted");
+                    ShowMessage("Without Location Permission we will not find ESP32 in scan");
+                    AppInfo.ShowSettingsUI();
+                    return false;
+                }
             }
-
-
-
             return true;
         }
 
+        private void AddOrUpdateSensor(IDevice device)
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                try
+                {
+                    AddOrUpdateDevice(device);
+                    var m = new AdverstisementModel();
+                    foreach (var ad in device.AdvertisementRecords)
+                    {
+                        ad.Parse(ref m);
+                        DebugMessage(ad.ToString());
+                    }
+
+                    if (m.ServiceData != null && m.ServiceData[0] == 0xAA)
+                    {
+                        var s = Sensors.FirstOrDefault(d => d.Id == device.Id);
+                        if(s != null)
+                        {
+                            s.Update(device, m);
+                        }
+                        else
+                        {
+                            var sensor = new SensorViewModel(device, m);
+                            Sensors.Add(sensor);
+                        }
+
+                    }
+                }
+                catch (Exception ex)
+                {
+                    DebugMessage($"Error processing advertising data {ex.Message}");
+                }
+            });
+        }
         private void AddOrUpdateDevice(IDevice device)
         {
             MainThread.BeginInvokeOnMainThread(() =>
