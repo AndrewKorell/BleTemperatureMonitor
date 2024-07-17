@@ -3,7 +3,7 @@ using BleTempMonitor.Services;
 using BleTempMonitor.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.ApplicationModel;
+using Microsoft.Maui.Controls;
 using Plugin.BLE;
 using Plugin.BLE.Abstractions;
 using Plugin.BLE.Abstractions.Contracts;
@@ -20,6 +20,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Runtime.InteropServices.Marshalling;
+using BleTempMonitor.Views;
 
 namespace BleTempMonitor.ViewModel
 {
@@ -35,7 +36,7 @@ namespace BleTempMonitor.ViewModel
 
         public BleScanViewModel()
         {
-            Title = "SCan for Sensors";
+            Title = "Local Temperature Sensors";
 
             BleDevices = [];
             Sensors = [];
@@ -61,8 +62,8 @@ namespace BleTempMonitor.ViewModel
         private void ConfigureBLE()
         {
             _ble.StateChanged += OnBluetoothStateChanged;
-            Adapter.ScanMatchMode = ScanMatchMode.AGRESSIVE;
-            Adapter.ScanTimeout = 30000;
+            Adapter.ScanMatchMode = ScanMatchMode.STICKY;
+            Adapter.ScanTimeout = 10000;
             Adapter.ScanTimeoutElapsed += Adapter_ScanTimeoutElapsed;
             Adapter.DeviceAdvertised += OnDeviceAdvertised;
             Adapter.DeviceDiscovered += Adapter_DeviceDiscovered;
@@ -118,6 +119,19 @@ namespace BleTempMonitor.ViewModel
             }
         }
 
+        [RelayCommand]  //The decorator adds Command on the generated code page 
+        async Task GetSensorDetails(Guid id)
+        {
+            //if (id == null) return;
+            try
+            {
+                await Shell.Current.GoToAsync($"{nameof(SensorDetailsPage)}?Id={id}", true);
+            }
+            catch(Exception ex)
+            {
+                DebugMessage($"Failed to launch details page {ex.Message}");
+            }
+        }
 
         private async void ScanForDevicesAsync()
         {
@@ -207,17 +221,19 @@ namespace BleTempMonitor.ViewModel
 
                     if (m.ServiceData != null && m.ServiceData[0] == 0xAA)
                     {
+                        var alias = App.SensorStorage.AddOrUpdate(device.Id);
+
                         var s = Sensors.FirstOrDefault(d => d.Id == device.Id);
                         if(s != null)
                         {
-                            s.Update(device, m);
+                            s.Update(device, m, alias);
                         }
                         else
                         {
-                            var sensor = new SensorViewModel(device, m);
+                            var sensor = new SensorViewModel(device, m, alias);
                             Sensors.Add(sensor);
                         }
-
+                        
                     }
                 }
                 catch (Exception ex)

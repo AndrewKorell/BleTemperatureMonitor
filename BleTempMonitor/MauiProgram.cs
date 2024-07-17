@@ -1,5 +1,6 @@
 ﻿using BleTempMonitor.Services;
 using BleTempMonitor.ViewModel;
+using BleTempMonitor.Views;
 using Microsoft.Extensions.Logging;
 
 namespace BleTempMonitor
@@ -18,6 +19,7 @@ namespace BleTempMonitor
                 });
             builder.Services.AddSingleton<IAlertService, AlertService>();
             builder.Services.AddSingleton<ISettingsService, SettingsService>();
+            builder.Services.AddSingleton<ISensorStorageService, SensorStorageService>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
@@ -25,9 +27,11 @@ namespace BleTempMonitor
 
             builder.Services.AddSingleton<BleScanViewModel>();
             builder.Services.AddSingleton<LoadingPageViewModel>();
+            builder.Services.AddTransient<SensorDetailsViewModel>();
 
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<LoadingPage>();
+            builder.Services.AddTransient<SensorDetailsPage>();
 
             return builder.Build();
         }

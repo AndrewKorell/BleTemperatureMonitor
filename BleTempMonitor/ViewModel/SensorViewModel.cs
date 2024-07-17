@@ -16,9 +16,10 @@ namespace BleTempMonitor.ViewModel
 {
     public partial class SensorViewModel : BaseViewModel
     {
-        public SensorViewModel(IDevice device, AdverstisementModel ad)
+        public SensorViewModel(IDevice device, AdverstisementModel ad, string alias)
         {
             //write once values
+            Alias = alias;
             Id = device.Id;
             Name = device.Name;
 
@@ -35,8 +36,9 @@ namespace BleTempMonitor.ViewModel
             UpdateAdRecord(ad);
         }
 
-        public void Update(IDevice device, AdverstisementModel ad)
+        public void Update(IDevice device, AdverstisementModel ad, string alias)
         {
+            Alias = alias;
             UpdateAdRecord(ad);
             UpdateDeviceRecord(device);
         }
@@ -63,6 +65,8 @@ namespace BleTempMonitor.ViewModel
             Rssi = device.Rssi;
             State = device.State;
         }
+        [ObservableProperty]
+        string alias = "not set";
 
         [ObservableProperty]
         Guid id;

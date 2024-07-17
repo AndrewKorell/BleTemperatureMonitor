@@ -1,5 +1,4 @@
 ﻿using BleTempMonitor.Services;
-using System.Security.Cryptography.X509Certificates;
 
 namespace BleTempMonitor
 {
@@ -15,6 +14,9 @@ namespace BleTempMonitor
         private static ISettingsService SettingsService;
         public static ISettingsService Settings => SettingsService;
 
+        private static ISensorStorageService SensorStorageService;
+        public static ISensorStorageService SensorStorage => SensorStorageService;
+
         public readonly static LogService Logger = new();
 
         public App(IServiceProvider provider)
@@ -24,7 +26,8 @@ namespace BleTempMonitor
             ServicesProvider = provider;
             AlertService = Services.GetService<IAlertService>();
             SettingsService = Services.GetService<ISettingsService>();
-            
+            SensorStorageService = Services.GetService<ISensorStorageService>();
+
             MainPage = new AppShell();
         }
     }

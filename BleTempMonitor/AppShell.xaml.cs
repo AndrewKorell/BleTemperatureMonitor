@@ -1,4 +1,6 @@
-﻿namespace BleTempMonitor
+﻿using BleTempMonitor.Views;
+
+namespace BleTempMonitor
 {
     public partial class AppShell : Shell
     {
@@ -6,6 +8,7 @@
         {
             InitializeComponent();
 
+            Routing.RegisterRoute(nameof(SensorDetailsPage), typeof(SensorDetailsPage));
             //Routing.RegisterRoute(nameof(MainPage), typeof(MainPage));
         }
     }
