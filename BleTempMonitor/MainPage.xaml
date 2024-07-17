@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="BleTempMonitor.MainPage"
+             xmlns:viewModel="clr-namespace:BleTempMonitor.ViewModel"
+             xmlns:model="clr-namespace:BleTempMonitor.Models"
+             x:DataType="viewModel:BleScanViewModel"
+             Title="{Binding Title}" >
+
+    <StackLayout>
+
+        <RefreshView Command="{Binding UpdateSensorsCommand}"
+                     IsRefreshing="{Binding IsRefreshing}">
+
+            <CollectionView x:Name="ItemsCollectionView" ItemsSource="{Binding Sensors}" 
+                            SelectionMode="Single"  
+                            SelectionChangedCommand="{Binding GetSensorDetailsCommand}"
+                            SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference ItemsCollectionView}}"
+                            HorizontalOptions="CenterAndExpand">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="viewModel:SensorViewModel">
+
+                        <Border Background="Black">
+
+                            <VerticalStackLayout HorizontalOptions="Fill" Padding="10">
+                                <VerticalStackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:BleScanViewModel}}, Path=GetSensorDetailsCommand }" 
+                                                          CommandParameter="{Binding Id}">
+                                    </TapGestureRecognizer>
+
+                                </VerticalStackLayout.GestureRecognizers>
+
+                                <Label Text="{Binding Alias, StringFormat='{0:S}'}" 
+                                       HorizontalTextAlignment="Center" 
+                                       TextColor="GhostWhite"
+                                       FontSize="20" FontAutoScalingEnabled="True"/>
+
+                                <Label Text="{Binding Voltage, StringFormat='Voltage {0:F2} V'}" 
+                                       FontSize="20" 
+                                       HorizontalOptions="Center"
+                                       TextColor="Green"/>
+                                <Label Text="{Binding Temperature, StringFormat='Temperature {0:F2} C'}" 
+                                       FontSize="20" 
+                                       HorizontalOptions="Center" 
+                                       TextColor="Green" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </StackLayout>
+</ContentPage>
