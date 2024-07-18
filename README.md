@@ -2,7 +2,9 @@
 
 Read temperature from two ESP32-S configured to send temperature through advertisers 
 
-Log and chart temperatures 
+![BleTempMonitorActivity drawio](https://github.com/user-attachments/assets/1bb67647-aff7-4585-ac7c-845b152fb08c)
+
+
 
 # The Data 
 
