@@ -23,20 +23,26 @@ namespace BleTempMonitor.ViewModel
             {
                 throw new Exception("Failed to read Guid from details");
             }
-            Id = temp;
-            Alias = App.SensorStorage.Get(temp);
+
+            MainThread.BeginInvokeOnMainThread(async () =>
+            {
+                Id = temp;
+                Alias = await App.SensorStorage.GetAlias(temp);
+            });
         }
 
         public SensorDetailsViewModel()
         {
         }
 
-
         [ObservableProperty]
         Guid id = Guid.NewGuid();
 
         [ObservableProperty]
         string alias = "not set";
+
+        [ObservableProperty]
+        string newAlias = "";
 
         [ObservableProperty]
         bool isInViewMode = true;
@@ -55,13 +61,18 @@ namespace BleTempMonitor.ViewModel
         [RelayCommand]
         async Task SaveName()
         {
-            if (string.IsNullOrEmpty(Alias))
+            string newName;
+            if (string.IsNullOrEmpty(NewAlias))
             {
-                Alias = App.SensorStorage.Get(Id);
-                return;
+                newName = await App.SensorStorage.GetAlias(Id);
+            }
+            else
+            {
+                newName = NewAlias;
+                await App.SensorStorage.AddOrUpdate(Id, newName);
             }
 
-            App.SensorStorage.AddOrUpdate(Id, Alias);
+            Alias = newName;
 
             IsInEditMode = false;
             IsInViewMode = true;

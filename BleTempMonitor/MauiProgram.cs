@@ -20,6 +20,9 @@ namespace BleTempMonitor
             builder.Services.AddSingleton<IAlertService, AlertService>();
             builder.Services.AddSingleton<ISettingsService, SettingsService>();
             builder.Services.AddSingleton<ISensorStorageService, SensorStorageService>();
+
+           // string dbPath = Path.Combine(FileSystem.AppDataDirectory, "sensors.db3");
+            builder.Services.AddSingleton<SensorDatabaseService>();
 #if DEBUG
             builder.Logging.AddDebug();
 #endif
