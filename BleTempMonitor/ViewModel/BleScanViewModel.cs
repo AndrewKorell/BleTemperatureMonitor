@@ -207,7 +207,7 @@ namespace BleTempMonitor.ViewModel
 
         private void AddOrUpdateSensor(IDevice device)
         {
-            MainThread.BeginInvokeOnMainThread(() =>
+            MainThread.BeginInvokeOnMainThread(async () =>
             {
                 try
                 {
@@ -221,7 +221,7 @@ namespace BleTempMonitor.ViewModel
 
                     if (m.ServiceData != null && m.ServiceData[0] == 0xAA)
                     {
-                        var alias = App.SensorStorage.AddOrUpdate(device.Id);
+                        var alias = await App.SensorStorage.AddOrUpdate(device.Id, string.Empty);
 
                         var s = Sensors.FirstOrDefault(d => d.Id == device.Id);
                         if(s != null)

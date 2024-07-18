@@ -1,50 +1,48 @@
 ﻿
+using BleTempMonitor.Extensions;
 using BleTempMonitor.Models;
 
 namespace BleTempMonitor.Services
 {
     public interface ISensorStorageService
     {
-        string AddOrUpdate(Guid id, string? alias=null);
+        Task<string> AddOrUpdate(Guid id, string alias);
 
-        bool IsStored(Guid id);
-
-        string Get(Guid id);
+        Task<string> GetAlias(Guid id);
     }
 
     public sealed class SensorStorageService : BaseModel, ISensorStorageService
     {
-        private readonly List<SensorStorageModel> archive = new List<SensorStorageModel>();
+        private readonly SensorDatabaseService database = new SensorDatabaseService();
 
-        public string AddOrUpdate(Guid id, string alias)
+        public async Task<string> AddOrUpdate(Guid guid, string alias)
         {
-            var m = archive.FirstOrDefault(x => x.Id == id);
+            DebugMessage("Begin Database Add");
+            var m = await database.GetItemAsync(guid);
             if(m != null)
             {
-                if(m.Alias != alias && alias != null)
+                if(m.Alias != alias && alias != string.Empty)
                 {
                     m.Alias = alias;
-                    DebugMessage($"Updating Alias for {m.Id.ToString()} to {alias}");
+                    await database.SaveItemAsync(m);
+                    DebugMessage($"Updating Alias for {m.Guid} to {alias}");
                 }
             }
             else
             {
-                m = new SensorStorageModel(id, alias);
-                archive.Add(m);
-                DebugMessage($"Adding {id.ToString()} to storage");
+                //We are saving a new value to the database
+                var tempalias = guid.GetTempAlias();
+                await database.SaveItemAsync(new Sensor { Alias = tempalias, Guid = guid, ID = 0 } );
+                m = database.GetItemAsync(guid).Result;
+                DebugMessage($"Adding {guid} to storage");
             }
             return m.Alias;
         }
         
-        public bool IsStored(Guid id)
+        public Task<string> GetAlias(Guid id)
         {
-            return archive.Any(x => x.Id == id);
-        }
-        
-        public string Get(Guid id)
-        {
-            var s = archive.FirstOrDefault(x => x.Id == id);
-            return s == null ? "error" : s.Alias;
+            DebugMessage("Database Get Alias");
+            return database.GetItemAliasAsync(id);
         }
     }
 }
