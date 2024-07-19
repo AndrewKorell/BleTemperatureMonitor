@@ -71,3 +71,5 @@ Add the following where we check permissions before running the scan.
 https://novelbits.io/bluetooth-low-energy-advertisements-part-1/
 
 https://developer.android.com/develop/sensors-and-location/location/permissions
+
+http://www.2createawebsite.com/build/hex-colors.html
