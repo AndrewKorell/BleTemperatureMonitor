@@ -4,7 +4,7 @@
              xmlns:viewModel="clr-namespace:BleTempMonitor.ViewModel"
              x:Class="BleTempMonitor.Views.SensorDetailsPage"
              Title="Sensor Details" x:DataType="viewModel:SensorDetailsViewModel">
-        <VerticalStackLayout Spacing="10" Margin="2">
+        <VerticalStackLayout Spacing="10" Margin="10">
 
             <Label Text="{Binding Id}" 
                    HorizontalTextAlignment="Center"
