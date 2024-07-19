@@ -20,7 +20,7 @@
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="viewModel:SensorViewModel">
 
-                        <Border Background="Black">
+                        <Border>
 
                             <VerticalStackLayout HorizontalOptions="Fill" Padding="10">
                                 <VerticalStackLayout.GestureRecognizers>
@@ -33,22 +33,24 @@
 
                                 <Label Text="{Binding Alias, StringFormat='{0:S}'}" 
                                        HorizontalTextAlignment="Center" 
-                                       TextColor="GhostWhite"
                                        FontSize="20" FontAutoScalingEnabled="True"/>
 
                                 <Label Text="{Binding Voltage, StringFormat='Voltage {0:F2} V'}" 
                                        FontSize="20" 
                                        HorizontalOptions="Center"
-                                       TextColor="Green"/>
+                                       />
                                 <Label Text="{Binding Temperature, StringFormat='Temperature {0:F2} C'}" 
                                        FontSize="20" 
-                                       HorizontalOptions="Center" 
-                                       TextColor="Green" />
+                                       HorizontalOptions="Center"  
+                                       />
                             </VerticalStackLayout>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </RefreshView>
+        
+        <Button Text="Update Sensors" HorizontalOptions="Fill" Command="{Binding UpdateSensorsCommand}" />
+        <Label Text="{Binding LastUpdate, StringFormat='Last Updated: {0:MM/dd/yy H:mm:ss zzz}'}" HorizontalOptions="Center" />
     </StackLayout>
 </ContentPage>

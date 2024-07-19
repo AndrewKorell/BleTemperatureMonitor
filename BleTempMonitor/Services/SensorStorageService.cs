@@ -44,5 +44,12 @@ namespace BleTempMonitor.Services
             DebugMessage("Database Get Alias");
             return database.GetItemAliasAsync(id);
         }
+
+        public async Task LogSensorData(int sensorId, double voltage, double temperature)
+        {
+            DebugMessage("Adding sensor data to log");
+            await database.InsertLogItemAsync(new LogItem { DateTime = DateTime.Now, Voltage=voltage, Temperature=temperature, SensorId=sensorId});
+
+        }
     }
 }

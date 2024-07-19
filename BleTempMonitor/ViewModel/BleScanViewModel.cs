@@ -97,6 +97,8 @@ namespace BleTempMonitor.ViewModel
         [ObservableProperty]
         bool isRefreshing;
 
+        [ObservableProperty]
+        DateTime lastUpdate;
 
         [RelayCommand]
         async Task UpdateSensors()
@@ -211,7 +213,7 @@ namespace BleTempMonitor.ViewModel
             {
                 try
                 {
-                    AddOrUpdateDevice(device);
+                    //AddOrUpdateDevice(device);
                     var m = new AdverstisementModel();
                     foreach (var ad in device.AdvertisementRecords)
                     {
@@ -221,6 +223,7 @@ namespace BleTempMonitor.ViewModel
 
                     if (m.ServiceData != null && m.ServiceData[0] == 0xAA)
                     {
+                        LastUpdate = DateTime.Now;
                         var alias = await App.SensorStorage.AddOrUpdate(device.Id, string.Empty);
 
                         var s = Sensors.FirstOrDefault(d => d.Id == device.Id);
@@ -230,10 +233,9 @@ namespace BleTempMonitor.ViewModel
                         }
                         else
                         {
-                            var sensor = new SensorViewModel(device, m, alias);
-                            Sensors.Add(sensor);
+                            s = new SensorViewModel(device, m, alias);
+                            Sensors.Add(s);
                         }
-                        
                     }
                 }
                 catch (Exception ex)

@@ -6,12 +6,28 @@
 
     <!-- Note: For Android please see also Platforms\Android\Resources\values\colors.xml -->
 
+
+    <Color x:Key="GreenScheme1">#05FF00</Color>
+    <Color x:Key="GreenScheme2">#04FF00</Color>
+    <Color x:Key="GreenScheme3">#03cc00</Color>
+    <Color x:Key="GreenScheme4">#029900</Color>
+    <Color x:Key="GreenScheme5">#014c00</Color>
+
+    <Color x:Key="Primary">#029900</Color>
+    <Color x:Key="PrimaryDark">#05ff00</Color>
+    <Color x:Key="PrimaryDarkText">#242424</Color>
+    <Color x:Key="Secondary">#f4f4f4</Color>
+    <Color x:Key="SecondaryDarkText">#04ff00</Color>
+    <Color x:Key="Tertiary">#014c00</Color>
+
+    <!--
     <Color x:Key="Primary">#512BD4</Color>
     <Color x:Key="PrimaryDark">#ac99ea</Color>
     <Color x:Key="PrimaryDarkText">#242424</Color>
     <Color x:Key="Secondary">#DFD8F7</Color>
     <Color x:Key="SecondaryDarkText">#9880e5</Color>
     <Color x:Key="Tertiary">#2B0B98</Color>
+    -->
 
     <Color x:Key="White">White</Color>
     <Color x:Key="Black">Black</Color>

@@ -84,5 +84,11 @@ namespace BleTempMonitor.Services
             await Init();
             return await Database.DeleteAsync(item);
         }
+
+        public async Task<int> InsertLogItemAsync(LogItem item)
+        {
+            await Init();
+            return await Database.InsertAsync(item);
+        }
     }
 }
