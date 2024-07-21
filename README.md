@@ -73,3 +73,7 @@ https://novelbits.io/bluetooth-low-energy-advertisements-part-1/
 https://developer.android.com/develop/sensors-and-location/location/permissions
 
 http://www.2createawebsite.com/build/hex-colors.html
+
+https://stackoverflow.com/questions/74977355/how-to-configure-gitlab-ci-cd-for-net-7-maui-android
+
+https://github.com/IntarBV/dotnet-maui-android/blob/master/README.md
