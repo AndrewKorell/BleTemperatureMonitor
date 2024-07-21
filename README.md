@@ -77,3 +77,6 @@ http://www.2createawebsite.com/build/hex-colors.html
 https://stackoverflow.com/questions/74977355/how-to-configure-gitlab-ci-cd-for-net-7-maui-android
 
 https://github.com/IntarBV/dotnet-maui-android/blob/master/README.md
+
+https://docs.github.com/en/actions/using-jobs/running-jobs-in-a-container
+
