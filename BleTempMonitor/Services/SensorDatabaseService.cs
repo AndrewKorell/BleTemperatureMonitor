@@ -35,7 +35,8 @@ namespace BleTempMonitor.Services
 
             Database = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
             //await Database.EnableWriteAheadLoggingAsync();
-            var result = await Database.CreateTableAsync<Sensor>();
+            await Database.CreateTableAsync<Sensor>();
+            await Database.CreateTableAsync<LogItem>();
         }
 
         public async Task<List<Sensor>> GetItemsAsync()
@@ -68,6 +69,13 @@ namespace BleTempMonitor.Services
         {
             await Init();
             var item = await Database.Table<Sensor>().Where(i => i.Guid == guid).FirstOrDefaultAsync();
+            return item == null ? "error" : item.Alias;
+        }
+
+        public async Task<string> GetItemAliasAsync(int id)
+        {
+            await Init();
+            var item = await Database.Table<Sensor>().Where(i => i.ID == id).FirstOrDefaultAsync();
             return item == null ? "error" : item.Alias;
         }
         public async Task<int> SaveItemAsync(Sensor item)

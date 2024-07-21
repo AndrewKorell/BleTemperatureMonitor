@@ -137,6 +137,18 @@ namespace BleTempMonitor.ViewModel
             }
         }
 
+        [RelayCommand]
+        async Task ViewSensorLog()
+        {
+            try
+            {
+                await Shell.Current.GoToAsync($"{nameof(SensorLogViewPage)}", true);
+            }
+            catch (Exception ex)
+            {
+                Msg.DebugMessage($"Failed to launch details page {ex.Message}");
+            }
+        }
         private async void ScanForDevicesAsync()
         {
             if (IsScanning) return;
@@ -167,9 +179,6 @@ namespace BleTempMonitor.ViewModel
 
             _scanCancellationTokenSource = new();
 
-            var filter = new ScanFilterOptions() {
-                DeviceAddresses = new[] {"4B:A9:D0:33:BD:08", "90:00:00:00:05:1D"}
-            };
             Msg.DebugMessage("call Adapter.StartScanningForDevicesAsync");
             await Adapter.StartScanningForDevicesAsync(_scanCancellationTokenSource.Token);
             Msg.DebugMessage("back from Adapter.StartScanningForDevicesAsync");
@@ -204,7 +213,7 @@ namespace BleTempMonitor.ViewModel
                         {
                             s.Update(device, m, alias);
                         }
-                        else
+                        else if(s == null)
                         {
                             s = new SensorViewModel(device, m, alias);
                             Sensors.Add(s);

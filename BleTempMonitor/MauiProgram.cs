@@ -31,10 +31,12 @@ namespace BleTempMonitor
             builder.Services.AddSingleton<BleScanViewModel>();
             builder.Services.AddSingleton<LoadingPageViewModel>();
             builder.Services.AddTransient<SensorDetailsViewModel>();
+            builder.Services.AddTransient<ShowLogDataViewModel>();
 
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<LoadingPage>();
             builder.Services.AddTransient<SensorDetailsPage>();
+            builder.Services.AddTransient<SensorLogViewPage>();
 
             return builder.Build();
         }

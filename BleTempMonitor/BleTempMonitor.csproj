@@ -87,6 +87,9 @@
 	  <MauiXaml Update="Views\SensorDetailsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	  <MauiXaml Update="Views\SensorLogViewPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	</ItemGroup>
 
 	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionBleTempMonitorHideInfoBar="True" XamarinHotReloadGenericExceptionInfoBarBleTempMonitorHideInfoBar="True" /></VisualStudio></ProjectExtensions>
