@@ -21,12 +21,14 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Runtime.InteropServices.Marshalling;
 using BleTempMonitor.Views;
+using BleTempMonitor.Helpers;
 
 namespace BleTempMonitor.ViewModel
 {
     public partial class BleScanViewModel : BaseViewModel
     {
-        
+        private readonly PermissionHelper prm = new PermissionHelper();
+
         CancellationTokenSource? _scanCancellationTokenSource = null;
         private readonly IBluetoothLE _ble;
         protected IAdapter Adapter;
@@ -76,9 +78,9 @@ namespace BleTempMonitor.ViewModel
 
         private void OnDeviceAdvertised(object? sender, DeviceEventArgs e)
         {
-            DebugMessage("OnDeviceAdvertised Start");
+            Msg.DebugMessage("OnDeviceAdvertised Start");
             AddOrUpdateSensor(e.Device);
-            DebugMessage("OnDeviceAdvertised Stop");
+            Msg.DebugMessage("OnDeviceAdvertised Stop");
         }
 
         private void Adapter_ScanTimeoutElapsed(object? sender, EventArgs e)
@@ -131,7 +133,7 @@ namespace BleTempMonitor.ViewModel
             }
             catch(Exception ex)
             {
-                DebugMessage($"Failed to launch details page {ex.Message}");
+                Msg.DebugMessage($"Failed to launch details page {ex.Message}");
             }
         }
 
@@ -139,21 +141,27 @@ namespace BleTempMonitor.ViewModel
         {
             if (IsScanning) return;
 
+            foreach(var svm in Sensors)
+            {
+                svm.IsUpdated = false;
+            }
+
             IsScanning = true;
 
             if (!_ble.IsOn)
             {
-                ShowMessage("Bluetooth is not ON.\nPlease turn on Bluetooth and try again.");
+                Msg.ShowMessage("Bluetooth is not ON.\nPlease turn on Bluetooth and try again.");
                 IsScanning = false;
                 return;
             }
-            if (!await HasCorrectPermissions())
+
+            if (!await prm.HasCorrectPermissions())
             {
-                DebugMessage("Aborting scan attempt");
+                Msg.DebugMessage("Aborting scan attempt");
                 IsScanning = false;
                 return;
             }
-            DebugMessage("StartScanForDevices called");
+            Msg.DebugMessage("StartScanForDevices called");
             BleDevices.Clear();
             //await UpdateConnectedDevices();
 
@@ -162,49 +170,14 @@ namespace BleTempMonitor.ViewModel
             var filter = new ScanFilterOptions() {
                 DeviceAddresses = new[] {"4B:A9:D0:33:BD:08", "90:00:00:00:05:1D"}
             };
-            DebugMessage("call Adapter.StartScanningForDevicesAsync");
+            Msg.DebugMessage("call Adapter.StartScanningForDevicesAsync");
             await Adapter.StartScanningForDevicesAsync(_scanCancellationTokenSource.Token);
-            DebugMessage("back from Adapter.StartScanningForDevicesAsync");
+            Msg.DebugMessage("back from Adapter.StartScanningForDevicesAsync");
 
             // Scanning stopped (for whichever reason) -> cleanup
             _scanCancellationTokenSource.Dispose();
             _scanCancellationTokenSource = null;
             IsScanning = false;
-        }
-
-
-        private async Task<bool> HasCorrectPermissions()
-        {
-            DebugMessage("Verifying Bluetooth permissions..");
-            var permissionResult = await Permissions.CheckStatusAsync<Permissions.Bluetooth>();
-            if (permissionResult != PermissionStatus.Granted)
-            {
-                permissionResult = await Permissions.RequestAsync<Permissions.Bluetooth>();
-            }
-
-            DebugMessage($"Result of requesting Bluetooth permissions: '{permissionResult}'");
-            if (permissionResult != PermissionStatus.Granted)
-            {
-                DebugMessage("Permissions not available, direct user to settings screen.");
-                ShowMessage("Permission denied. Not scanning.");
-                AppInfo.ShowSettingsUI();
-                return false;
-            }
-                
-                
-            permissionResult = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
-            if (permissionResult != PermissionStatus.Granted)
-            {
-                permissionResult = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
-                if (permissionResult != PermissionStatus.Granted)
-                {
-                    DebugMessage("Location Persmission not granted");
-                    ShowMessage("Without Location Permission we will not find ESP32 in scan");
-                    AppInfo.ShowSettingsUI();
-                    return false;
-                }
-            }
-            return true;
         }
 
         private void AddOrUpdateSensor(IDevice device)
@@ -218,7 +191,7 @@ namespace BleTempMonitor.ViewModel
                     foreach (var ad in device.AdvertisementRecords)
                     {
                         ad.Parse(ref m);
-                        DebugMessage(ad.ToString());
+                        Msg.DebugMessage(ad.ToString());
                     }
 
                     if (m.ServiceData != null && m.ServiceData[0] == 0xAA)
@@ -227,7 +200,7 @@ namespace BleTempMonitor.ViewModel
                         var alias = await App.SensorStorage.AddOrUpdate(device.Id, string.Empty);
 
                         var s = Sensors.FirstOrDefault(d => d.Id == device.Id);
-                        if(s != null)
+                        if(s != null && s.IsUpdated == false)
                         {
                             s.Update(device, m, alias);
                         }
@@ -240,7 +213,7 @@ namespace BleTempMonitor.ViewModel
                 }
                 catch (Exception ex)
                 {
-                    DebugMessage($"Error processing advertising data {ex.Message}");
+                    Msg.DebugMessage($"Error processing advertising data {ex.Message}");
                 }
             });
         }

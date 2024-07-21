@@ -4,13 +4,7 @@ using BleTempMonitor.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Plugin.BLE.Abstractions;
 using Plugin.BLE.Abstractions.Contracts;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BleTempMonitor.ViewModel
 {
@@ -22,7 +16,7 @@ namespace BleTempMonitor.ViewModel
             Alias = alias;
             Id = device.Id;
             Name = device.Name;
-
+            IsUpdated = true;
             //write many values
             UpdateDeviceRecord(device);
 
@@ -39,6 +33,7 @@ namespace BleTempMonitor.ViewModel
         public void Update(IDevice device, AdverstisementModel ad, string alias)
         {
             Alias = alias;
+            IsUpdated = true;
             UpdateAdRecord(ad);
             UpdateDeviceRecord(device);
         }
@@ -65,6 +60,10 @@ namespace BleTempMonitor.ViewModel
             Rssi = device.Rssi;
             State = device.State;
         }
+
+        [ObservableProperty]
+        bool isUpdated;
+
         [ObservableProperty]
         string alias = "not set";
 
