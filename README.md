@@ -74,9 +74,16 @@ https://developer.android.com/develop/sensors-and-location/location/permissions
 
 http://www.2createawebsite.com/build/hex-colors.html
 
+## Converting the Temparature 
+
+https://www.hugi.scene.org/online/coding/hugi%2015%20-%20cmtadfix.htm
+
+## Continuous Development
+
 https://stackoverflow.com/questions/74977355/how-to-configure-gitlab-ci-cd-for-net-7-maui-android
 
 https://github.com/IntarBV/dotnet-maui-android/blob/master/README.md
 
 https://docs.github.com/en/actions/using-jobs/running-jobs-in-a-container
 
+https://thewissen.io/making-maui-cd-pipeline/
