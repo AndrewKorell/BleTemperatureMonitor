@@ -1,6 +1,10 @@
 # BLE Temperature Monitor 
 
-Read temperature from two ESP32-S configured to send temperature through advertisers 
+Read temperature from an ESP32 device setup to use the BLE EddyStone example code seen here: https://github.com/google/eddystone
+
+My setup uses a Node MCU ESP-32S which is not really and S1 or S2 in the more recent variants. 
+
+The focus of this project is the Maui project. More work on the EddyStone side is on my todo list. 
 
 # Screen Shots 
 
