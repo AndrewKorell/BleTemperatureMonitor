@@ -4,7 +4,7 @@ Read temperature from two ESP32-S configured to send temperature through adverti
 
 # Screen Shots 
 
-![ScreenMap](https://github.com/user-attachments/assets/d7227aa4-69b9-4279-bbc1-fe905c8ac438)
+![ScreenMap](https://github.com/user-attachments/assets/be162bfb-ea84-4600-b175-fe01f12dcb08)
 
 
 # Swimlane 
