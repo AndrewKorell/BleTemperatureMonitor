@@ -2,6 +2,18 @@
 
 Read temperature from two ESP32-S configured to send temperature through advertisers 
 
+# Screen Shots 
+
+![Screenshot (Jul 23, 2024 10_25_32 PM)](https://github.com/user-attachments/assets/4033e499-4a56-45bf-86e5-3817b6024a95)
+
+![Screenshot (Jul 23, 2024 10_26_31 PM)](https://github.com/user-attachments/assets/58111477-66a5-4931-bc44-f94603663c32)
+
+![Screenshot (Jul 23, 2024 10_27_09 PM)](https://github.com/user-attachments/assets/9efd4205-3cdc-494d-9fff-191cd57c72e3)
+
+![Screenshot (Jul 23, 2024 10_31_43 PM)](https://github.com/user-attachments/assets/78816a3b-a007-4374-a892-886d8500b299)
+
+# Swimlane 
+ 
 ![BleTempMonitorActivity drawio](https://github.com/user-attachments/assets/1bb67647-aff7-4585-ac7c-845b152fb08c)
 
 
