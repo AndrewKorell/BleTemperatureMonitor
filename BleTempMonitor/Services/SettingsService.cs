@@ -14,8 +14,8 @@ namespace BleTempMonitor.Services
 
     public sealed class SettingsService : ISettingsService
     {
-        private const double voltageScale = 1.0 / 1000.0; //used as multiplier
-        private const double tmpScale = 1.0 / 1000.0;  //used as multiplier
+        private const double voltageScale = 1.0 / 1000.0; // mV to V, used as multiplier
+        private const double tmpScale = 1.0 / 256.0;  //8.8 format 2^8 = 256, used as multiplier
         
         public double VoltageScale
         {

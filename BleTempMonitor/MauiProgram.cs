@@ -1,6 +1,7 @@
 ﻿using BleTempMonitor.Services;
 using BleTempMonitor.ViewModel;
 using BleTempMonitor.Views;
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
 
 namespace BleTempMonitor
@@ -11,6 +12,7 @@ namespace BleTempMonitor
         {
             var builder = MauiApp.CreateBuilder();
             builder
+                .UseMauiCommunityToolkit()
                 .UseMauiApp<App>()
                 .ConfigureFonts(fonts =>
                 {

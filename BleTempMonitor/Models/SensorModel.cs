@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace BleTempMonitor.Models
 {
     [Table("Sensor")]
-    public class Sensor
+    public class SensorModel
     {
         [PrimaryKey]
         [AutoIncrement]

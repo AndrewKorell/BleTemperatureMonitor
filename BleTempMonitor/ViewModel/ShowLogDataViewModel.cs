@@ -1,5 +1,7 @@
 ﻿using BleTempMonitor.Helpers;
 using BleTempMonitor.Models;
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,8 +23,13 @@ namespace BleTempMonitor.ViewModel
 
         private async Task UpdateItems()
         {
+            if (IsUpdating) return;
+
+            IsUpdating = true;
             try
             {
+                Items.Clear();
+
                 var logItems = await App.SensorStorage.ListLogData();
 
                 foreach (var item in logItems)
@@ -39,7 +46,37 @@ namespace BleTempMonitor.ViewModel
             {
                 Msg.DebugMessage($"Failed to load Log {ex.Message}");
             }
+            finally
+            {
+                IsUpdating = false;
+            }
+
         }
 
+        [RelayCommand]
+        async Task ClearLog()
+        {
+            if (IsUpdating) return;
+
+            try
+            {
+                IsUpdating = true;
+                await App.SensorStorage.ClearLogData();
+                IsUpdating = false;
+                await UpdateItems();
+
+            }
+            catch (Exception ex)
+            {
+                Msg.DebugMessage($"Error clearing log {ex.Message}");
+            }
+            finally
+            {
+                IsUpdating = false;
+            }
+        }
+
+        [ObservableProperty]
+        bool isUpdating;
     }
 }

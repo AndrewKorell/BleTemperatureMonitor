@@ -2,43 +2,63 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="BleTempMonitor.Views.SensorLogViewPage"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:viewModel="clr-namespace:BleTempMonitor.ViewModel"
              xmlns:model="clr-namespace:BleTempMonitor.Models"
+
              Title="SensorLogViewPage">
-    <VerticalStackLayout>
-        <CollectionView x:Name="ItemsCollectionView" ItemsSource="{Binding Sensors}" 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+
+        <ScrollView HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Always" Grid.Row="0" >
+            <CollectionView x:Name="ItemsCollectionView" ItemsSource="{Binding Items}" 
                             SelectionMode="None"  
                             HorizontalOptions="CenterAndExpand">
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="viewModel:LogItemViewModel">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="viewModel:LogItemViewModel">
 
-                    <Border>
+                        <Border>
 
-                        <VerticalStackLayout HorizontalOptions="Fill" Padding="10">
-                            <!--<VerticalStackLayout.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:BleScanViewModel}}, Path=GetSensorDetailsCommand }" 
-                                                          CommandParameter="{Binding Id}">
-                                </TapGestureRecognizer>
-
-                            </VerticalStackLayout.GestureRecognizers>-->
-
-                            <Label Text="{Binding Alias, StringFormat='{0:S}'}" 
+                            <Grid ColumnSpacing="5" RowSpacing="10" Padding="5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="30"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Label Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2"
+                                        Text="{Binding Alias, StringFormat='{0:S}'}" 
                                        HorizontalTextAlignment="Center" 
                                        FontSize="20" FontAutoScalingEnabled="True"/>
 
-                            <Label Text="{Binding Voltage, StringFormat='Voltage {0:F2} V'}" 
-                                       FontSize="20" 
-                                       HorizontalOptions="Center"
-                                       />
-                            <Label Text="{Binding Temperature, StringFormat='Temperature {0:F2} C'}" 
+                                <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Source="thermometer_a.svg" 
+                                       VerticalOptions="Center" HorizontalOptions="Center" />
+                                
+                                <Label Grid.Column="2" Grid.Row="1" Text="{Binding DateTime}" 
+                                       VerticalTextAlignment="Center"
+                                       HorizontalOptions="Center" VerticalOptions="Center" />
+
+                                <Label Grid.Column="1" Grid.Row="1" Text="{Binding Temperature, StringFormat='{0:F2} C'}" 
                                        FontSize="20" 
                                        HorizontalOptions="Center"  
+                                       VerticalOptions="Center"
+                                       VerticalTextAlignment="Center"
                                        />
-                        </VerticalStackLayout>
-                    </Border>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
-    </VerticalStackLayout>
+
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </ScrollView>
+        <Button Grid.Row="1" Text="Clear Logs" Command="{Binding ClearLogCommand}" HorizontalOptions="Fill" HeightRequest="70" VerticalOptions="Start" />
+
+    </Grid>
 </ContentPage>

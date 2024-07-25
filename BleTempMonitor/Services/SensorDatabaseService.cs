@@ -35,50 +35,50 @@ namespace BleTempMonitor.Services
 
             Database = new SQLiteAsyncConnection(Constants.DatabasePath, Constants.Flags);
             //await Database.EnableWriteAheadLoggingAsync();
-            await Database.CreateTableAsync<Sensor>();
+            await Database.CreateTableAsync<SensorModel>();
             await Database.CreateTableAsync<LogItem>();
         }
 
-        public async Task<List<Sensor>> GetItemsAsync()
+        public async Task<List<SensorModel>> GetItemsAsync()
         {
             await Init();
-            return await Database.Table<Sensor>().ToListAsync();
+            return await Database.Table<SensorModel>().ToListAsync();
         }
 
 
-        public async Task<Sensor> GetItemAsync(int id)
+        public async Task<SensorModel> GetItemAsync(int id)
         {
             await Init();
-            return await Database.Table<Sensor>().Where(i => i.ID == id).FirstOrDefaultAsync();
+            return await Database.Table<SensorModel>().Where(i => i.ID == id).FirstOrDefaultAsync();
         }
 
-        public async Task<Sensor> GetItemAsync(Guid guid)
+        public async Task<SensorModel> GetItemAsync(Guid guid)
         {
             await Init();
-            return await Database.Table<Sensor>().Where(i => i.Guid == guid).FirstOrDefaultAsync();
+            return await Database.Table<SensorModel>().Where(i => i.Guid == guid).FirstOrDefaultAsync();
         }
 
         public async Task<int> GetItemIDAsync(Guid guid)
         {
             await Init();
-            var item = await Database.Table<Sensor>().Where(i => i.Guid == guid).FirstOrDefaultAsync();
+            var item = await Database.Table<SensorModel>().Where(i => i.Guid == guid).FirstOrDefaultAsync();
             return item == null ? 0 : item.ID;
         }
 
         public async Task<string> GetItemAliasAsync(Guid guid)
         {
             await Init();
-            var item = await Database.Table<Sensor>().Where(i => i.Guid == guid).FirstOrDefaultAsync();
+            var item = await Database.Table<SensorModel>().Where(i => i.Guid == guid).FirstOrDefaultAsync();
             return item == null ? "error" : item.Alias;
         }
 
         public async Task<string> GetItemAliasAsync(int id)
         {
             await Init();
-            var item = await Database.Table<Sensor>().Where(i => i.ID == id).FirstOrDefaultAsync();
+            var item = await Database.Table<SensorModel>().Where(i => i.ID == id).FirstOrDefaultAsync();
             return item == null ? "error" : item.Alias;
         }
-        public async Task<int> SaveItemAsync(Sensor item)
+        public async Task<int> SaveItemAsync(SensorModel item)
         {
             await Init();
             if (item.ID != 0)
@@ -87,7 +87,7 @@ namespace BleTempMonitor.Services
                 return await Database.InsertAsync(item);
         }
 
-        public async Task<int> DeleteItemAsync(Sensor item)
+        public async Task<int> DeleteItemAsync(SensorModel item)
         {
             await Init();
             return await Database.DeleteAsync(item);

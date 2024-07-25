@@ -7,7 +7,7 @@ namespace BleTempMonitor.Services
 {
     public interface ISensorStorageService
     {
-        Task<string> AddOrUpdate(Guid id, string alias);
+        Task<SensorModel> AddOrUpdate(Guid id, string alias);
 
         Task<string> GetAlias(Guid id);
 
@@ -24,7 +24,7 @@ namespace BleTempMonitor.Services
     {
         private readonly SensorDatabaseService database = new();
 
-        public async Task<string> AddOrUpdate(Guid guid, string alias)
+        public async Task<SensorModel> AddOrUpdate(Guid guid, string alias)
         {
             Msg.DebugMessage("Begin Database Add");
             var m = await database.GetItemAsync(guid);
@@ -41,11 +41,11 @@ namespace BleTempMonitor.Services
             {
                 //We are saving a new value to the database
                 var tempalias = guid.GetTempAlias();
-                await database.SaveItemAsync(new Sensor { Alias = tempalias, Guid = guid, ID = 0 } );
+                await database.SaveItemAsync(new SensorModel { Alias = tempalias, Guid = guid, ID = 0 } );
                 m = await database.GetItemAsync(guid);
                 Msg.DebugMessage($"Adding {guid} to storage");
             }
-            return m.Alias;
+            return m;
         }
 
         public async Task<string> GetAlias(int id)

@@ -41,6 +41,11 @@
                                        FontSize="20" 
                                        HorizontalOptions="Center"  
                                        />
+
+                                <!--<Label Text="{Binding TempRaw, StringFormat='TempRaw 0x{0:X4}'}" 
+                                       FontSize="20" 
+                                       HorizontalOptions="Center"  
+                                       />-->
                             </VerticalStackLayout>
                         </Border>
                     </DataTemplate>

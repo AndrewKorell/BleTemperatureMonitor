@@ -33,19 +33,19 @@ namespace BleTempMonitor.ViewModel
         private readonly IBluetoothLE _ble;
         protected IAdapter Adapter;
 
-        public ObservableCollection<BleDeviceViewModel> BleDevices { get; private set; }
+//        public ObservableCollection<BleDeviceViewModel> BleDevices { get; private set; }
         public ObservableCollection<SensorViewModel> Sensors { get; private set; }
 
         public BleScanViewModel()
         {
             Title = "Local Temperature Sensors";
 
-            BleDevices = [];
+//            BleDevices = [];
             Sensors = [];
 
             _ble = CrossBluetoothLE.Current;
 
-            Adapter = _ble?.Adapter;
+            Adapter = _ble.Adapter;
             if (_ble is null)
             {
                 //ShowMessage("BluetoothManager is null");
@@ -68,13 +68,13 @@ namespace BleTempMonitor.ViewModel
             Adapter.ScanTimeout = 10000;
             Adapter.ScanTimeoutElapsed += Adapter_ScanTimeoutElapsed;
             Adapter.DeviceAdvertised += OnDeviceAdvertised;
-            Adapter.DeviceDiscovered += Adapter_DeviceDiscovered;
+ //           Adapter.DeviceDiscovered += Adapter_DeviceDiscovered;
         }
 
-        private void Adapter_DeviceDiscovered(object? sender, DeviceEventArgs e)
-        {
-            AddOrUpdateDevice(e.Device);
-        }
+        //private void Adapter_DeviceDiscovered(object? sender, DeviceEventArgs e)
+        //{
+        //    AddOrUpdateDevice(e.Device);
+        //}
 
         private void OnDeviceAdvertised(object? sender, DeviceEventArgs e)
         {
@@ -174,7 +174,7 @@ namespace BleTempMonitor.ViewModel
                 return;
             }
             Msg.DebugMessage("StartScanForDevices called");
-            BleDevices.Clear();
+            //BleDevices.Clear();
             //await UpdateConnectedDevices();
 
             _scanCancellationTokenSource = new();
@@ -206,18 +206,21 @@ namespace BleTempMonitor.ViewModel
                     if (m.ServiceData != null && m.ServiceData[0] == 0xAA)
                     {
                         LastUpdate = DateTime.Now;
-                        var alias = await App.SensorStorage.AddOrUpdate(device.Id, string.Empty);
+                        var model = await App.SensorStorage.AddOrUpdate(device.Id, string.Empty);
 
                         var s = Sensors.FirstOrDefault(d => d.Id == device.Id);
                         if(s != null && s.IsUpdated == false)
                         {
-                            s.Update(device, m, alias);
+                            s.Update(device, m, model.Alias);
+                            await App.SensorStorage.InsertLogData(model.ID, s.Voltage, s.Temperature);
                         }
                         else if(s == null)
                         {
-                            s = new SensorViewModel(device, m, alias);
+                            s = new SensorViewModel(device, m, model.Alias);
                             Sensors.Add(s);
+                            await App.SensorStorage.InsertLogData(model.ID, s.Voltage, s.Temperature);
                         }
+                        
                     }
                 }
                 catch (Exception ex)
@@ -226,22 +229,23 @@ namespace BleTempMonitor.ViewModel
                 }
             });
         }
-        private void AddOrUpdateDevice(IDevice device)
-        {
-            MainThread.BeginInvokeOnMainThread(() =>
-            {
-                var vm = BleDevices.FirstOrDefault(d => d.DeviceId == device.Id);
-                if (vm != null)
-                {
-                    vm.Update(device);
-                }
-                else
-                {
-                    vm = new BleDeviceViewModel(device);
-                    BleDevices.Add(vm);
-                }
-            });
-        }
+
+        //private void AddOrUpdateDevice(IDevice device)
+        //{
+        //    MainThread.BeginInvokeOnMainThread(() =>
+        //    {
+        //        var vm = BleDevices.FirstOrDefault(d => d.DeviceId == device.Id);
+        //        if (vm != null)
+        //        {
+        //            vm.Update(device);
+        //        }
+        //        else
+        //        {
+        //            vm = new BleDeviceViewModel(device);
+        //            BleDevices.Add(vm);
+        //        }
+        //    });
+        //}
 
     }
 }
