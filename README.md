@@ -8,8 +8,7 @@ Read temperature from two ESP32-S configured to send temperature through adverti
 
 # Swimlane 
  
-![BleTempMonitorActivity drawio](https://github.com/user-attachments/assets/1bb67647-aff7-4585-ac7c-845b152fb08c)
-
+![BleTempMonitorActivity drawio(1)](https://github.com/user-attachments/assets/a60833df-5a8c-4dd1-ae1d-8335647cfdd7)
 
 
 # The Data 
