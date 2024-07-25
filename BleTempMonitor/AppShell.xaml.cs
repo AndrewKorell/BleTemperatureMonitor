@@ -9,6 +9,7 @@ namespace BleTempMonitor
             InitializeComponent();
 
             Routing.RegisterRoute(nameof(SensorDetailsPage), typeof(SensorDetailsPage));
+            Routing.RegisterRoute(nameof(SensorLogViewPage), typeof(SensorLogViewPage));
             //Routing.RegisterRoute(nameof(MainPage), typeof(MainPage));
         }
     }

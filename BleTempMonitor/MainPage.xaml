@@ -7,22 +7,20 @@
              x:DataType="viewModel:BleScanViewModel"
              Title="{Binding Title}" >
 
-    <StackLayout>
+    <StackLayout Spacing="10">
 
         <RefreshView Command="{Binding UpdateSensorsCommand}"
                      IsRefreshing="{Binding IsRefreshing}">
 
             <CollectionView x:Name="ItemsCollectionView" ItemsSource="{Binding Sensors}" 
-                            SelectionMode="Single"  
-                            SelectionChangedCommand="{Binding GetSensorDetailsCommand}"
-                            SelectionChangedCommandParameter="{Binding SelectedItem, Source={x:Reference ItemsCollectionView}}"
+                            SelectionMode="None"  
                             HorizontalOptions="CenterAndExpand">
                 <CollectionView.ItemTemplate>
                     <DataTemplate x:DataType="viewModel:SensorViewModel">
 
-                        <Border Background="Black">
+                        <Border>
 
-                            <VerticalStackLayout HorizontalOptions="Fill" Padding="10">
+                            <VerticalStackLayout HorizontalOptions="Fill" Padding="10" Spacing="10">
                                 <VerticalStackLayout.GestureRecognizers>
                                     <TapGestureRecognizer
                                     Command="{Binding Source={RelativeSource AncestorType={x:Type viewModel:BleScanViewModel}}, Path=GetSensorDetailsCommand }" 
@@ -33,22 +31,35 @@
 
                                 <Label Text="{Binding Alias, StringFormat='{0:S}'}" 
                                        HorizontalTextAlignment="Center" 
-                                       TextColor="GhostWhite"
                                        FontSize="20" FontAutoScalingEnabled="True"/>
 
                                 <Label Text="{Binding Voltage, StringFormat='Voltage {0:F2} V'}" 
                                        FontSize="20" 
                                        HorizontalOptions="Center"
-                                       TextColor="Green"/>
+                                       />
                                 <Label Text="{Binding Temperature, StringFormat='Temperature {0:F2} C'}" 
                                        FontSize="20" 
-                                       HorizontalOptions="Center" 
-                                       TextColor="Green" />
+                                       HorizontalOptions="Center"  
+                                       />
+
+                                <!--<Label Text="{Binding TempRaw, StringFormat='TempRaw 0x{0:X4}'}" 
+                                       FontSize="20" 
+                                       HorizontalOptions="Center"  
+                                       />-->
                             </VerticalStackLayout>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </RefreshView>
+
+        <Button Text="View Sensor Log" 
+                HorizontalOptions="Fill" 
+                Command="{Binding ViewSensorLogCommand}" />
+        <Button Text="Update Sensors" 
+                HorizontalOptions="Fill" 
+                Command="{Binding UpdateSensorsCommand}" />
+        <Label Text="{Binding LastUpdate, StringFormat='Last Updated: {0:MM/dd/yy H:mm:ss zzz}'}" 
+               HorizontalOptions="Center" />
     </StackLayout>
 </ContentPage>

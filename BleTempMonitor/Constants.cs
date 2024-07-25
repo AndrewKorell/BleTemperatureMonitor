@@ -8,7 +8,7 @@ namespace BleTempMonitor
 {
     public static class Constants
     {
-        public const string DatabaseFilename = "SavedSensors2.db3";
+        public const string DatabaseFilename = "SavedSensors3.db3";
 
         public const SQLite.SQLiteOpenFlags Flags =
             // open the database in read/write mode

@@ -4,41 +4,34 @@
              xmlns:viewModel="clr-namespace:BleTempMonitor.ViewModel"
              x:Class="BleTempMonitor.Views.SensorDetailsPage"
              Title="Sensor Details" x:DataType="viewModel:SensorDetailsViewModel">
-        <VerticalStackLayout>
+        <VerticalStackLayout Spacing="10" Margin="10">
 
             <Label Text="{Binding Id}" 
-                   FontSize="20"
-                   TextColor="DarkGreen"
                    HorizontalTextAlignment="Center"
-                   
                 />
+            
         <Entry x:Name="EditAlias" 
                Text="{Binding NewAlias}" 
                IsVisible="{Binding IsInEditMode}"
                HorizontalOptions="Fill"
                HorizontalTextAlignment="Center" 
-               FontSize="20"
                />
 
         <Label Text="{Binding Alias}" 
-                   FontSize="18"
-                   TextColor="DarkGreen"
                    HorizontalTextAlignment="Center"
                    IsVisible="{Binding IsInViewMode}"
                    />
-
+            
         <Button Text="Change Name" 
                 HorizontalOptions="Fill"
                 Command="{Binding ChangeNameCommand}"
                 IsVisible="{Binding IsInViewMode}"
-                Margin="10" Background="Green" TextColor="WhiteSmoke"
                 />
 
         <Button Text="Save" 
                 HorizontalOptions="Fill"
                 Command="{Binding SaveNameCommand}"
                 IsVisible="{Binding IsInEditMode}"
-                Margin="10" Background="Green" TextColor="WhiteSmoke"
                 />
 
 

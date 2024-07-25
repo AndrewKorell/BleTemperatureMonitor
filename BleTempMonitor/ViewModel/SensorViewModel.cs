@@ -4,13 +4,7 @@ using BleTempMonitor.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Plugin.BLE.Abstractions;
 using Plugin.BLE.Abstractions.Contracts;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BleTempMonitor.ViewModel
 {
@@ -22,7 +16,7 @@ namespace BleTempMonitor.ViewModel
             Alias = alias;
             Id = device.Id;
             Name = device.Name;
-
+            IsUpdated = true;
             //write many values
             UpdateDeviceRecord(device);
 
@@ -39,6 +33,7 @@ namespace BleTempMonitor.ViewModel
         public void Update(IDevice device, AdverstisementModel ad, string alias)
         {
             Alias = alias;
+            IsUpdated = true;
             UpdateAdRecord(ad);
             UpdateDeviceRecord(device);
         }
@@ -54,8 +49,12 @@ namespace BleTempMonitor.ViewModel
                 throw new ArgumentOutOfRangeException(nameof(AdverstisementModel.ServiceData.Length));
             }
 
-            Voltage = (double)((int)ad.ServiceData[4] << 8 | (int)ad.ServiceData[5]) * App.Settings.VoltageScale;
-            Temperature = (double)(ad.ServiceData[6] << 8 | ad.ServiceData[7]) * App.Settings.TmpScale; // << 8 | data[5];
+            VoltageRaw = (ushort)(ad.ServiceData[4] << 8 | (ushort)ad.ServiceData[5]);
+            Voltage = (double)((ushort)ad.ServiceData[4] << 8 | (ushort)ad.ServiceData[5]) * App.Settings.VoltageScale;
+
+            TempRaw = (short)((ushort) ad.ServiceData[6] << 8 | (ushort)ad.ServiceData[7]);
+            Temperature = (double)(TempRaw) * App.Settings.TmpScale; // << 8 | data[5]; //We Swap the endienness of this as well. 
+
             Count = (long)ad.ServiceData[8] << 24 | (long)ad.ServiceData[9] << 16 | (long)ad.ServiceData[10] << 8 | (long)ad.ServiceData[11];
             Time = (long)ad.ServiceData[12] << 24 | (long)ad.ServiceData[13] << 16 | (long)ad.ServiceData[14] << 8 | (long)ad.ServiceData[15];
         }
@@ -65,6 +64,10 @@ namespace BleTempMonitor.ViewModel
             Rssi = device.Rssi;
             State = device.State;
         }
+
+        [ObservableProperty]
+        bool isUpdated;
+
         [ObservableProperty]
         string alias = "not set";
 
@@ -96,7 +99,13 @@ namespace BleTempMonitor.ViewModel
         double temperature;
 
         [ObservableProperty]
+        short tempRaw;
+
+        [ObservableProperty]
         double voltage;
+
+        [ObservableProperty]
+        ushort voltageRaw;
 
         [ObservableProperty]
         long count;
