@@ -4,7 +4,7 @@ Read temperature from two ESP32-S configured to send temperature through adverti
 
 # Screen Shots 
 
-![Screenshot (Jul 23, 2024 10_25_32 PM)](https://github.com/user-attachments/assets/4033e499-4a56-45bf-86e5-3817b6024a95)
+<img src="[drawing.jpg](https://github.com/user-attachments/assets/4033e499-4a56-45bf-86e5-3817b6024a95)" alt="main page" width="200"/>
 
 ![Screenshot (Jul 23, 2024 10_26_31 PM)](https://github.com/user-attachments/assets/58111477-66a5-4931-bc44-f94603663c32)
 
