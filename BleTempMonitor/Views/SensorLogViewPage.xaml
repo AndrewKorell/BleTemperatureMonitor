@@ -6,7 +6,7 @@
              xmlns:viewModel="clr-namespace:BleTempMonitor.ViewModel"
              xmlns:model="clr-namespace:BleTempMonitor.Models"
 
-             Title="SensorLogViewPage">
+             Title="Sensor Log">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />

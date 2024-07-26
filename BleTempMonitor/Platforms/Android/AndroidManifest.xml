@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.andrewkorell.bletempmonitor">
 	<application android:allowBackup="true" android:icon="@mipmap/appicon" android:supportsRtl="true" android:label="BleTempMonitor"></application>
 	<uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -8,16 +8,15 @@
 		 for more information about which permissions to use for your target platform
 	-->
 	<uses-feature android:name="android.hardware.bluetooth_le" android:required="true" />
-	<uses-permission android:name="android.permission.BLUETOOTH_SCAN"  />
+	<uses-permission android:name="android.permission.BLUETOOTH_SCAN" />
 	<uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
 	<!-- Needed for Android 11 and lower -->
 	<uses-permission android:name="android.permission.BLUETOOTH" android:maxSdkVersion="30" />
-	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"  />
-
+	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 	<!-- Needed for some devices to be able to use LE local discovery on Android 10/11 -->
 	<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" android:maxSdkVersion="30" />
-	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"  />
-	<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"  />
+	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+	<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_MOCK_LOCATION" android:maxSdkVersion="30" />
 	<uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 </manifest>
