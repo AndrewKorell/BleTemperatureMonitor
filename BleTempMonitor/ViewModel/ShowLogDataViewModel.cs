@@ -44,7 +44,7 @@ namespace BleTempMonitor.ViewModel
             }
             catch (Exception ex)
             {
-                Msg.DebugMessage($"Failed to load Log {ex.Message}");
+                App.Logger.AddMessage($"Failed to load Log {ex.Message}");
             }
             finally
             {
@@ -68,7 +68,7 @@ namespace BleTempMonitor.ViewModel
             }
             catch (Exception ex)
             {
-                Msg.DebugMessage($"Error clearing log {ex.Message}");
+                App.Logger.AddMessage($"Error clearing log {ex.Message}");
             }
             finally
             {

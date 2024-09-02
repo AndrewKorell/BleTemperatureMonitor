@@ -1,27 +1,37 @@
-﻿using System;
+﻿using BleTempMonitor.Resources;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+//using static Android.Icu.Text.CaseMap;
 
 namespace BleTempMonitor.Helpers
 {
-    public class PermissionHelper
+    public interface IPermissionHelper
+    {
+        Task<bool> HasCorrectPermissions();
+    }
+
+    public class PermissionHelper : IPermissionHelper
     {
         public async Task<bool> HasCorrectPermissions()
         {
-            Msg.DebugMessage("Verifying Bluetooth permissions..");
+            App.Logger.AddMessage("Verifying Bluetooth permissions..");
             var permissionResult = await Permissions.CheckStatusAsync<Permissions.Bluetooth>();
             if (permissionResult != PermissionStatus.Granted)
             {
                 permissionResult = await Permissions.RequestAsync<Permissions.Bluetooth>();
             }
 
-            Msg.DebugMessage($"Result of requesting Bluetooth permissions: '{permissionResult}'");
+            App.Logger.AddMessage($"Result of requesting Bluetooth permissions: '{permissionResult}'");
+  
             if (permissionResult != PermissionStatus.Granted)
             {
-                Msg.DebugMessage("Permissions not available, direct user to settings screen.");
-                Msg.ShowMessage("Permission denied. Not scanning.");
+                App.Logger.AddMessage("Permissions not available, direct user to settings screen.");
+                await App.AlertSvc.ShowAlertAsync(AppResources.PermissionHelperAlertTitle,
+                    AppResources.PermissionHelperPermissionDenied,
+                    AppResources.Button_OK);
                 AppInfo.ShowSettingsUI();
                 return false;
             }
@@ -32,8 +42,10 @@ namespace BleTempMonitor.Helpers
                 permissionResult = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
                 if (permissionResult != PermissionStatus.Granted)
                 {
-                    Msg.DebugMessage("Location Persmission not granted");
-                    Msg.ShowMessage("Without Location Permission we will not find ESP32 in scan");
+                    App.Logger.AddMessage("Location Persmission not granted");
+                    await App.AlertSvc.ShowAlertAsync(AppResources.PermissionHelperAlertTitle,
+                        AppResources.PermissionHelperLocationPermissionNotGranted, 
+                        AppResources.Button_OK);
                     AppInfo.ShowSettingsUI();
                     return false;
                 }

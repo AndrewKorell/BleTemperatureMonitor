@@ -22,11 +22,11 @@ namespace BleTempMonitor.Services
 
     public sealed class SensorStorageService : BaseModel, ISensorStorageService
     {
-        private readonly SensorDatabaseService database = new();
+        private readonly ISensorDatabaseService database = new SensorDatabaseService();
 
         public async Task<SensorModel> AddOrUpdate(Guid guid, string alias)
         {
-            Msg.DebugMessage("Begin Database Add");
+            App.Logger.AddMessage("Begin Database Add");
             var m = await database.GetItemAsync(guid);
             if(m != null)
             {
@@ -34,7 +34,7 @@ namespace BleTempMonitor.Services
                 {
                     m.Alias = alias;
                     await database.SaveItemAsync(m);
-                    Msg.DebugMessage($"Updating Alias for {m.Guid} to {alias}");
+                    App.Logger.AddMessage($"Updating Alias for {m.Guid} to {alias}");
                 }
             }
             else
@@ -43,41 +43,34 @@ namespace BleTempMonitor.Services
                 var tempalias = guid.GetTempAlias();
                 await database.SaveItemAsync(new SensorModel { Alias = tempalias, Guid = guid, ID = 0 } );
                 m = await database.GetItemAsync(guid);
-                Msg.DebugMessage($"Adding {guid} to storage");
+                App.Logger.AddMessage($"Adding {guid} to storage");
             }
             return m;
         }
 
         public async Task<string> GetAlias(int id)
         {
-            Msg.DebugMessage("Database Get Alias");
             return await database.GetItemAliasAsync(id);
         }
 
         public async Task<string> GetAlias(Guid id)
         {
-            Msg.DebugMessage("Database Get Alias");
             return await database.GetItemAliasAsync(id);
         }
 
         public async Task InsertLogData(int sensorId, double voltage, double temperature)
         {
-            Msg.DebugMessage("Adding sensor data to log");
             await database.InsertLogItemAsync(new LogItem { DateTime = DateTime.Now, Voltage=voltage, Temperature=temperature, SensorId=sensorId});
         }
 
         public async Task<List<LogItem>> ListLogData()
         {
-            Msg.DebugMessage("retrieving all sensor log dota.");
             return await database.GetLogItemsAsync();
         }
 
         public async Task ClearLogData()
         {
-            Msg.DebugMessage("clearning all sensor log data");
             await database.ClearLogItemTable();
         }
-        
-        
     }
 }

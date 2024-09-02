@@ -19,12 +19,21 @@ namespace BleTempMonitor.Services
 {
     public interface ISensorDatabaseService
     {
-
+        Task<List<SensorModel>> GetItemsAsync();
+        Task<SensorModel> GetItemAsync(Guid guid);
+        Task<int> GetItemIDAsync(Guid guid);
+        Task<string> GetItemAliasAsync(Guid guid);
+        Task<string> GetItemAliasAsync(int id);
+        Task<int> SaveItemAsync(SensorModel item);
+        Task<int> InsertLogItemAsync(LogItem item);
+        Task<int> DeleteItemAsync(SensorModel item);
+        Task<List<LogItem>> GetLogItemsAsync();
+        Task ClearLogItemTable();
     }
 
-    public class SensorDatabaseService
+    public class SensorDatabaseService : ISensorDatabaseService
     {
-        SQLiteAsyncConnection Database;
+        protected SQLiteAsyncConnection Database;
 
         public SensorDatabaseService() { }
 
