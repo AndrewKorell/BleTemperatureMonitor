@@ -32,7 +32,6 @@ namespace BleTempMonitor.ViewModel
         private readonly IBluetoothLE? _ble;
         protected IAdapter Adapter;
 
-
         private readonly IPermissionHelper prm = new PermissionHelper();
         private readonly IBleHelpers _bleHelper = new BleHelper();
 

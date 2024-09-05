@@ -151,6 +151,24 @@ namespace BleTempMonitor.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TmpScale.
+        /// </summary>
+        internal static string PrefTmpScaleName {
+            get {
+                return ResourceManager.GetString("PrefTmpScaleName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to VoltScale.
+        /// </summary>
+        internal static string PrefVoltScaleName {
+            get {
+                return ResourceManager.GetString("PrefVoltScaleName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to SensorPageTitle.
         /// </summary>
         internal static string SensorPageTitle {
