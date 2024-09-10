@@ -61,29 +61,29 @@ namespace BleTempMonitor.Services
             return m;
         }
 
-        public async Task<string> GetAlias(int id)
+        public Task<string> GetAlias(int id)
         {
-            return await _database.GetItemAliasAsync(id);
+            return _database.GetItemAliasAsync(id);
         }
 
-        public async Task<string> GetAlias(Guid id)
+        public Task<string> GetAlias(Guid id)
         {
-            return await _database.GetItemAliasAsync(id);
+            return _database.GetItemAliasAsync(id);
         }
 
-        public async Task InsertLogData(int sensorId, double voltage, double temperature)
+        public Task InsertLogData(int sensorId, double voltage, double temperature)
         {
-            await _database.InsertLogItemAsync(new LogItem(voltage, temperature, sensorId));
+            return _database.InsertLogItemAsync(new LogItem(voltage, temperature, sensorId));
         }
 
-        public async Task<List<LogItem>> ListLogData()
+        public Task<List<LogItem>> ListLogData()
         {
-            return await _database.GetLogItemsAsync();
+            return _database.GetLogItemsAsync();
         }
 
-        public async Task ClearLogData()
+        public Task ClearLogData()
         {
-            await _database.ClearLogItemTable();
+            return _database.ClearLogItemTable();
         }
     }
 }

@@ -7,7 +7,16 @@ using System.Threading.Tasks;
 
 namespace BleTempMonitor.Services
 {
-    public class LogService
+    public interface ILogService
+    {
+        void ClearMessages();
+
+        void AddMessage(string message);
+
+        ReadOnlyObservableCollection<string> Messages { get; init; }
+    }
+    
+    public class LogService : ILogService
     {
         private readonly ObservableCollection<string> LogMessages = [];
         public ReadOnlyObservableCollection<string> Messages { get; init; }

@@ -1,29 +1,15 @@
 ﻿using BleTempMonitor.Models;
-using BleTempMonitor.Services;
-using BleTempMonitor.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Maui.Controls;
 using Plugin.BLE;
-using Plugin.BLE.Abstractions;
 using Plugin.BLE.Abstractions.Contracts;
 using Plugin.BLE.Abstractions.EventArgs;
 using Plugin.BLE.Abstractions.Extensions;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Runtime.InteropServices.Marshalling;
 using BleTempMonitor.Views;
 using BleTempMonitor.Helpers;
 using BleTempMonitor.Resources;
-using System.Collections.Specialized;
 
 namespace BleTempMonitor.ViewModel
 {
@@ -143,7 +129,7 @@ namespace BleTempMonitor.ViewModel
 
         #endregion
 
-        private async void ScanForDevicesAsync()
+        private void ScanForDevicesAsync()
         {
             if (IsScanning || _ble == null) return;
 
@@ -161,7 +147,7 @@ namespace BleTempMonitor.ViewModel
                 return;
             }
 
-            if (!await prm.HasCorrectPermissions())
+            if (!prm.HasCorrectPermissions().GetAwaiter().GetResult())
             {
                 App.Logger.AddMessage(AppResources.BLEIncorrectPermission);
                 IsScanning = false;
@@ -174,7 +160,7 @@ namespace BleTempMonitor.ViewModel
             _scanCancellationTokenSource = new();
 
             App.Logger.AddMessage("call Adapter.StartScanningForDevicesAsync");
-            await Adapter.StartScanningForDevicesAsync(_scanCancellationTokenSource.Token);
+            Adapter.StartScanningForDevicesAsync(_scanCancellationTokenSource.Token).GetAwaiter().GetResult();
             App.Logger.AddMessage("back from Adapter.StartScanningForDevicesAsync");
 
             // Scanning stopped (for whichever reason) -> cleanup

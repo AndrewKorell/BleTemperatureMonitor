@@ -16,8 +16,8 @@ namespace BleTempMonitor
 
         private static ISensorStorageService SensorStorageService;
         public static ISensorStorageService SensorStorage => SensorStorageService;
-
-        public readonly static LogService Logger = new();
+        
+        public readonly static LogService Logger = new ();
 
         public App(IServiceProvider provider)
         {
