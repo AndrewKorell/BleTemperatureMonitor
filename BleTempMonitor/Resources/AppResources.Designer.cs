@@ -124,6 +124,15 @@ namespace BleTempMonitor.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to BLE Temperature Sensors.
+        /// </summary>
+        internal static string MainPageTitle {
+            get {
+                return ResourceManager.GetString("MainPageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Permission Alert.
         /// </summary>
         internal static string PermissionHelperAlertTitle {
@@ -165,6 +174,15 @@ namespace BleTempMonitor.Resources {
         internal static string PrefVoltScaleName {
             get {
                 return ResourceManager.GetString("PrefVoltScaleName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sensor Details.
+        /// </summary>
+        internal static string SensorDetailsPageTitle {
+            get {
+                return ResourceManager.GetString("SensorDetailsPageTitle", resourceCulture);
             }
         }
         

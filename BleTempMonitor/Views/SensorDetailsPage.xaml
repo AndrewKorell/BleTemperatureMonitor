@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModel="clr-namespace:BleTempMonitor.ViewModel"
              x:Class="BleTempMonitor.Views.SensorDetailsPage"
-             Title="Sensor Details" x:DataType="viewModel:SensorDetailsViewModel">
+             xmlns:appres="clr-namespace:BleTempMonitor.Resources"
+             Title="{x:Static appres:AppResources.SensorDetailsPageTitle}" x:DataType="viewModel:SensorDetailsViewModel">
         <VerticalStackLayout Spacing="10" Margin="10">
 
             <Label Text="{Binding Id}" 

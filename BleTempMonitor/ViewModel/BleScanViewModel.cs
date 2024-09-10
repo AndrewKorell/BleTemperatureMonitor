@@ -10,6 +10,7 @@ using System.Diagnostics;
 using BleTempMonitor.Views;
 using BleTempMonitor.Helpers;
 using BleTempMonitor.Resources;
+using AsyncAwaitBestPractices;
 
 namespace BleTempMonitor.ViewModel
 {
@@ -28,7 +29,7 @@ namespace BleTempMonitor.ViewModel
 
         public BleScanViewModel()
         {
-            Title = AppResources.SensorPageTitle;
+            Title = "BLE Sensors";
             Sensors = [];
 
             _ble = CrossBluetoothLE.Current;
@@ -50,6 +51,14 @@ namespace BleTempMonitor.ViewModel
             Adapter.ScanMatchMode = ScanMatchMode.STICKY;
             Adapter.ScanTimeout = 10000;
             Adapter.DeviceAdvertised += OnDeviceAdvertised;
+            Adapter.ScanTimeoutElapsed += Adapter_ScanTimeoutElapsed;
+        }
+
+        private void Adapter_ScanTimeoutElapsed(object? sender, EventArgs e)
+        {
+            //_scanCancellationTokenSource.Dispose();
+            //_scanCancellationTokenSource = null;
+            IsScanning = false;
         }
 
         private void OnDeviceAdvertised(object? sender, DeviceEventArgs e)
@@ -160,13 +169,13 @@ namespace BleTempMonitor.ViewModel
             _scanCancellationTokenSource = new();
 
             App.Logger.AddMessage("call Adapter.StartScanningForDevicesAsync");
-            Adapter.StartScanningForDevicesAsync(_scanCancellationTokenSource.Token).GetAwaiter().GetResult();
+            Adapter.StartScanningForDevicesAsync(_scanCancellationTokenSource.Token).SafeFireAndForget();
             App.Logger.AddMessage("back from Adapter.StartScanningForDevicesAsync");
 
             // Scanning stopped (for whichever reason) -> cleanup
-            _scanCancellationTokenSource.Dispose();
-            _scanCancellationTokenSource = null;
-            IsScanning = false;
+            //_scanCancellationTokenSource.Dispose();
+            //_scanCancellationTokenSource = null;
+            //IsScanning = false;
         }
 
         private void AddOrUpdateSensor(IDevice device)

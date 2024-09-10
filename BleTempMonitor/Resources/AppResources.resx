@@ -158,4 +158,10 @@
   <data name="PrefVoltScaleName" xml:space="preserve">
     <value>VoltScale</value>
   </data>
+  <data name="MainPageTitle" xml:space="preserve">
+    <value>BLE Temperature Sensors</value>
+  </data>
+  <data name="SensorDetailsPageTitle" xml:space="preserve">
+    <value>Sensor Details</value>
+  </data>
 </root>
