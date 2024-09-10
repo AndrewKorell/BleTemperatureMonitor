@@ -50,7 +50,7 @@ namespace BleTempMonitor.ViewModel
             }
 
             VoltageRaw = (ushort)(ad.ServiceData[4] << 8 | (ushort)ad.ServiceData[5]);
-            Voltage = (double)((ushort)ad.ServiceData[4] << 8 | (ushort)ad.ServiceData[5]) * App.Settings.VoltageScale;
+            Voltage = (double)((ushort)ad.ServiceData[4] << 8 | (ushort)ad.ServiceData[5]) * App.Settings.VoltScale;
 
             TempRaw = (short)((ushort) ad.ServiceData[6] << 8 | (ushort)ad.ServiceData[7]);
             Temperature = (double)(TempRaw) * App.Settings.TmpScale; // << 8 | data[5]; //We Swap the endienness of this as well. 

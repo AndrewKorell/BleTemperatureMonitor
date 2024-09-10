@@ -7,7 +7,7 @@ namespace BleTempMonitor.Services
 {
     public interface ISensorStorageService
     {
-        Task<SensorModel> AddOrUpdate(Guid id, string alias);
+        Task<SensorModel?> AddOrUpdate(Guid id, string alias);
 
         Task<string> GetAlias(Guid id);
 
@@ -22,62 +22,68 @@ namespace BleTempMonitor.Services
 
     public sealed class SensorStorageService : BaseModel, ISensorStorageService
     {
-        private readonly SensorDatabaseService database = new();
 
-        public async Task<SensorModel> AddOrUpdate(Guid guid, string alias)
+        private readonly ISensorDatabaseService _database;
+ 
+        public SensorStorageService() 
         {
-            Msg.DebugMessage("Begin Database Add");
-            var m = await database.GetItemAsync(guid);
+            _database = new SensorDatabaseService();
+        }
+
+        public SensorStorageService(ISensorDatabaseService database)
+        {
+            _database = database;
+        }
+
+        //string alias may be empty when generating with new ID
+        public async Task<SensorModel?> AddOrUpdate(Guid guid, string alias)
+        {
+            //App.Logger.AddMessage("Begin Database Add");
+            var m = await _database.GetItemAsync(guid);
             if(m != null)
             {
+                
                 if(m.Alias != alias && alias != string.Empty)
                 {
                     m.Alias = alias;
-                    await database.SaveItemAsync(m);
-                    Msg.DebugMessage($"Updating Alias for {m.Guid} to {alias}");
+                    await _database.SaveItemAsync(m);
+                    //App.Logger.AddMessage($"Updating Alias for {m.Guid} to {alias}");
                 }
             }
             else
             {
                 //We are saving a new value to the database
-                var tempalias = guid.GetTempAlias();
-                await database.SaveItemAsync(new SensorModel { Alias = tempalias, Guid = guid, ID = 0 } );
-                m = await database.GetItemAsync(guid);
-                Msg.DebugMessage($"Adding {guid} to storage");
+                var tempalias = guid.GetTempAlias();  //todo: this isn't unit tested
+                await _database.SaveItemAsync(new SensorModel { Alias = tempalias, Guid = guid, ID = 0 } );
+                m = await _database.GetItemAsync(guid);
+                //App.Logger.AddMessage($"Adding {guid} to storage");
             }
             return m;
         }
 
-        public async Task<string> GetAlias(int id)
+        public Task<string> GetAlias(int id)
         {
-            Msg.DebugMessage("Database Get Alias");
-            return await database.GetItemAliasAsync(id);
+            return _database.GetItemAliasAsync(id);
         }
 
-        public async Task<string> GetAlias(Guid id)
+        public Task<string> GetAlias(Guid id)
         {
-            Msg.DebugMessage("Database Get Alias");
-            return await database.GetItemAliasAsync(id);
+            return _database.GetItemAliasAsync(id);
         }
 
-        public async Task InsertLogData(int sensorId, double voltage, double temperature)
+        public Task InsertLogData(int sensorId, double voltage, double temperature)
         {
-            Msg.DebugMessage("Adding sensor data to log");
-            await database.InsertLogItemAsync(new LogItem { DateTime = DateTime.Now, Voltage=voltage, Temperature=temperature, SensorId=sensorId});
+            return _database.InsertLogItemAsync(new LogItem(voltage, temperature, sensorId));
         }
 
-        public async Task<List<LogItem>> ListLogData()
+        public Task<List<LogItem>> ListLogData()
         {
-            Msg.DebugMessage("retrieving all sensor log dota.");
-            return await database.GetLogItemsAsync();
+            return _database.GetLogItemsAsync();
         }
 
-        public async Task ClearLogData()
+        public Task ClearLogData()
         {
-            Msg.DebugMessage("clearning all sensor log data");
-            await database.ClearLogItemTable();
+            return _database.ClearLogItemTable();
         }
-        
-        
     }
 }

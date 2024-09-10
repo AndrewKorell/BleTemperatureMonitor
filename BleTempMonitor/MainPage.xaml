@@ -4,6 +4,7 @@
              x:Class="BleTempMonitor.MainPage"
              xmlns:viewModel="clr-namespace:BleTempMonitor.ViewModel"
              xmlns:model="clr-namespace:BleTempMonitor.Models"
+             xmlns:appres="clr-namespace:BleTempMonitor.Resources"
              x:DataType="viewModel:BleScanViewModel"
              Title="{Binding Title}" >
 

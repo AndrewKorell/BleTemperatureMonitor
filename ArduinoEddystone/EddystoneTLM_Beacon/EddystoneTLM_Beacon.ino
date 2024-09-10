@@ -78,7 +78,6 @@ void setup() {
 
   // Create the BLE Device
   BLEDevice::init("TLMBeacon");
-
   BLEDevice::setPower(BEACON_POWER);
 
   pAdvertising = BLEDevice::getAdvertising();

@@ -6,7 +6,7 @@
              xmlns:viewModel="clr-namespace:BleTempMonitor.ViewModel"
              xmlns:model="clr-namespace:BleTempMonitor.Models"
 
-             Title="SensorLogViewPage">
+             Title="Sensor Log">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
@@ -23,13 +23,13 @@
 
                         <Border>
 
-                            <Grid ColumnSpacing="5" RowSpacing="10" Padding="5">
+                            <Grid ColumnSpacing="2" RowSpacing="2" Padding="2">
                                 <Grid.RowDefinitions>
-                                    <RowDefinition Height="30"/>
-                                    <RowDefinition Height="30"/>
+                                    <RowDefinition Height="40"/>
+                                    <RowDefinition Height="40"/>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="60"/>
+                                    <ColumnDefinition Width="80"/>
                                     <ColumnDefinition Width="100" />
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
@@ -38,8 +38,8 @@
                                        HorizontalTextAlignment="Center" 
                                        FontSize="20" FontAutoScalingEnabled="True"/>
 
-                                <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Source="thermometer_a.svg" 
-                                       VerticalOptions="Center" HorizontalOptions="Center" />
+                                <Image Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Source="thermometer_a.svg" HeightRequest="40" WidthRequest="40" 
+                                       VerticalOptions="CenterAndExpand" HorizontalOptions="CenterAndExpand" Margin="0" />
                                 
                                 <Label Grid.Column="2" Grid.Row="1" Text="{Binding DateTime}" 
                                        VerticalTextAlignment="Center"

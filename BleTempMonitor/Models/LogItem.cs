@@ -6,6 +6,15 @@ namespace BleTempMonitor.Models
     [Table("Log")]
     public class LogItem
     {
+        public LogItem() { }
+
+        public LogItem(double voltage, double temperature, int id)
+        {
+            DateTime = DateTime.Now;
+            Temperature = temperature;
+            Voltage = voltage;
+            SensorId = id;
+        }
         [PrimaryKey]
         [AutoIncrement]
         public int Id { get; set; }
